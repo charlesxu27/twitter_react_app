@@ -12,7 +12,7 @@ export default function TweetBox(props) {
   const handleOnSubmit = () => {
 
     const newTweet = {
-      id: props.tweets.length,
+      // id: props.tweets.length,
       name: props.userProfile.name,
       handle: props.userProfile.handle,
       text: props.tweetText,
@@ -23,7 +23,7 @@ export default function TweetBox(props) {
     console.log(`TEXT Tweet!!!: ${props.tweetText}`)
 
     // props.setTweets(newTweet)
-    props.setTweets((oldTweets) => [...oldTweets, { ...newTweet, id: oldTweets.length }])
+    props.setTweets((oldTweets) => ([...oldTweets, { ...newTweet, id: oldTweets.length }]))
     // props.setUserProfile(props.userProfile.numTweets + 1)
     props.setTweetText("")
   }
