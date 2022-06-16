@@ -3,41 +3,43 @@ import TweetInput from "./TweetInput"
 import "./TweetBox.css"
 
 export default function TweetBox(props) {
+
+  const handleOnTweetTextChange = (event) => {
+    props.setTweetText(event.target.value)
+    console.log(`TEXT Target: ${event.target.value}`)
+  }
+
   const handleOnSubmit = () => {
 
-    console.log(`TWEETS: ${props.tweets.length}`)
-    console.log(`NAME: ${props.userProfile.name}`)
-    console.log(`HANDLE: ${props.userProfile.handle}`)
     const newTweet = {
-      // id: props.tweets.length,
+      id: props.tweets.length,
       name: props.userProfile.name,
       handle: props.userProfile.handle,
-      text: "hey all!!! :D",
+      text: props.tweetText,
       comments: 0,
       retweets: 150,
       likes: 99
     }
+    console.log(`TEXT Tweet!!!: ${props.tweetText}`)
 
     // props.setTweets(newTweet)
-    props.setTweets((oldTweets) => [...oldTweets, {...newTweet, id: oldTweets.length}])
-
-
-    console.log(`TWEETS 2: ${props.tweets.length}`)
-    console.log(`NAME 2: ${props.userProfile.name}`)
-    console.log(`HANDLE 2: ${props.userProfile.handle}`)
-
+    props.setTweets((oldTweets) => [...oldTweets, { ...newTweet, id: oldTweets.length }])
+    // props.setUserProfile(props.userProfile.numTweets + 1)
+    props.setTweetText("")
   }
+
   return (
     <div className="tweet-box">
-      <TweetInput />
+      <TweetInput value={props.tweetText} handleOnChange={handleOnTweetTextChange} />
       <div className="tweet-box-footer">
         <TweetBoxIcons />
-        <TweetCharacterCount />
-        <TweetSubmitButton handleOnSubmit={handleOnSubmit} />
+        <TweetCharacterCount tweetText={props.tweetText} charactersLeft={140 - props.tweetText.length} />
+        <TweetSubmitButton handleOnSubmit={handleOnSubmit} isValidText={props.tweetText.length > 0 && props.tweetText.length <= 140} />
       </div>
     </div>
   )
 }
+
 
 export function TweetBoxIcons() {
   return (
@@ -51,15 +53,20 @@ export function TweetBoxIcons() {
 }
 
 export function TweetCharacterCount(props) {
-  // ADD CODE HERE
-  return <span></span>
+  return (<span>{props.charactersLeft}</span>)
+
 }
 
-export function TweetSubmitButton(props) {
-  return (
-    <div className="tweet-submit">
-      <i className="fas fa-plus-circle"></i>
-      <button className="tweet-submit-button" onClick={props.handleOnSubmit}>Tweet</button>
-    </div>
-  )
+
+export function TweetSubmitButton(props) { // use a boolean
+  if (props.isValidText) {
+    return (
+      <div className="tweet-submit">
+        <i className="fas fa-plus-circle"></i>
+        <button className="tweet-submit-button" onClick={props.handleOnSubmit}>Tweet</button>
+      </div>
+    )
+  }
+  return null
 }
+
